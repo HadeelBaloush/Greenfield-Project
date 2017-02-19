@@ -5,7 +5,6 @@ var CookerSchedule = require('./models/CookerSchedule.js');
 var CookNames = require('./models/CookNames.js');
 var Comments = require('./models/Comments.js');
 
-
 module.exports = {
 	signin: function(req, res){
 		var username = req.body.username;
@@ -26,7 +25,7 @@ module.exports = {
 		})
 	},
 	signup: function(req, res){
-		//check
+		
 		var user = req.body;
 		var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 		var cookerID;

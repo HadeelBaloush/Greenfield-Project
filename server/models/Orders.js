@@ -13,6 +13,7 @@ exports.getOrdersByUserName = function (UserName, callback) {
 				 ,CookNames.Name, CookNames.ID as cookNameID \
 				 ,Orders.DeliveryDate \
 				 ,Orders.DeliverTime \
+				 ,Orders.Quantity \
 				 from Orders \
 				 join Users as Cooker on Cooker.ID = Orders.CookerID \
 				 join CookNames on CookNames.ID = Orders.CookNamesID \
@@ -30,10 +31,8 @@ exports.getOrderByID = function (ID, callback) {
 
 
 exports.addOrder = function (orderObj, callback) {
-	var Query = 'insert into Orders (CookerID,UserID,DeliveryDate,DeliverTime,Quantity) \
-                 values (:CookerID,:UserID,:DeliveryDate,:DeliverTime,:Quantity)';
-	sequelize.query(Query, { replacements: { CookerID: orderObj.cookerID, UserID: orderObj.userID, DeliveryDate: orderObj.deliveryDate, DeliverTime: orderObj.deliveryTime, Quantity: orderObj.quantity }, type: Sequelize.QueryTypes.INSERT })
+	var Query = 'insert into Orders (CookerID,UserID,DeliveryDate,DeliverTime,CookNamesID,Quantity) \
+                 values (:CookerID,:UserID,:DeliveryDate,:DeliverTime, :CookNamesID, :Quantity)';
+	sequelize.query(Query, { replacements: { CookerID: orderObj.cookerID, UserID: orderObj.userID, DeliveryDate: orderObj.deliveryDate, DeliverTime: orderObj.deliveryTime,CookNamesID:orderObj.CookNamesID ,Quantity: orderObj.quantity }, type: Sequelize.QueryTypes.INSERT })
 		.then(callback)
 }
-
-

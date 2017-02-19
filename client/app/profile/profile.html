@@ -4,7 +4,7 @@ background-position: top;
 min-height: 500px;
 z-index: 2;
 padding-top: 100px;
-" ng-controller="ProfileController">
+" ng-controller="ProfileController" ng-init="getProfile()">
 
 <div class="row" style="padding-bottom: 50px;margin:0px;"><div class="col-md-10 col-md-offset-1 text-center">
 
@@ -35,10 +35,10 @@ padding-top: 100px;
 
 </div>
 
-<div class="col-xs-12" style="margin-top: 50px;">  
+<div class="col-xs-12" style="margin-top: 50px;" ng-if="data.todayCook !== ''">  
   <span style="padding: 20px;font-size: 1.7em;color: #fff;"><b>{{ data.FullName }}</b> cooking for today is : <b>{{ data.todayCook.Name }}</b>, just for 
   <b>{{ data.todayCook.Price }}</b> JOD!</span>
-  <button href="#/orders/add/{{ data.user.UserName }}/{{ data.todayCook.ID }}/{{ userDetails.username }}" class="btn btn-lg btn-primary">Order now</button>
+  <button ng-click="setOrder($root.UserID, data.todayCook.ID, 1, data.todayCook.FullName, data.todayCook.Name)" class="btn btn-lg btn-primary">Order now</button>
 </div>
 
 </div>
@@ -72,7 +72,7 @@ padding-top: 100px;
 </div>
 <div class="row">
   <div class="page-header text-center">
-    <h1>User reviews <small> for {{ data.user.FullName }}</small></h1>
+    <h1>User reviews <small> for {{ data.FullName }}</small></h1>
   </div>
 </div>
 <div class="row">
@@ -80,8 +80,8 @@ padding-top: 100px;
 
     <div class="col-md-6 col-xs-12" ng-repeat="comment in data.comments">
       <div class="panel panel-default">
-        <div class="panel-body">{{ comment.HTMLBody }}</div>
-        <div class="panel-footer">{{ comment.UserName }}</div>
+        <div class="panel-body">{{ comment.ComBody }}</div>
+        <div class="panel-footer">{{ comment.InsertedUserFullName }}</div>
       </div>
     </div>
 

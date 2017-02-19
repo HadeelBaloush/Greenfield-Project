@@ -67,10 +67,10 @@ angular.module('otbo5ly.services', [])
       });
     },
 
-    addCookerSchedule : function(username){
+    getCookingNames : function(){
       return $http({
-        method: 'POST',
-        url: '/api/schedule/' + username,
+        method: 'GET',
+        url: '/api/cookingNames',
         })
         .then(function (resp) {
           console.log(resp.data);
@@ -81,11 +81,27 @@ angular.module('otbo5ly.services', [])
             throw err;
           }
       });
+    },
+
+    addNewOrder : function(order){
+      return $http({
+        method: 'POST',
+        url: '/api/orders',
+        data : order
+        })
+        .then(function (resp) {
+          return resp;
+        }).catch(function(err){
+          if(err) {
+            console.log(err);
+            return {status:500};
+          }
+      });
     }
 
   }
 })
-.factory('Auth', function ($http, $location, $window) {
+.factory('Auth', function ($http, $location, $window, $rootScope) {
   // Don't touch this Auth service!!!
   // it is responsible for authenticating our user
   // by exchanging the user's username and password
@@ -100,7 +116,7 @@ angular.module('otbo5ly.services', [])
       data: user
     })
     .then(function (resp) {
-      return resp.data.token;
+      return resp.data;
     });
   };          
 
@@ -111,7 +127,7 @@ angular.module('otbo5ly.services', [])
       data: user
     })
     .then(function (resp) {
-      return resp.data.token;
+      return resp.data;
     });
   };
 
@@ -122,6 +138,10 @@ angular.module('otbo5ly.services', [])
   var signout = function () {
     $window.localStorage.removeItem('com.otbo5ly');
     $window.localStorage.removeItem('user.otbo5ly');
+    $rootScope.isLoggedIn = false;
+    $rootScope.isCooker = false;
+    $rootScope.UserName = undefined;
+    $rootScope.UserID = undefined;
     $location.path('/signin');
   };
 
@@ -132,4 +152,25 @@ angular.module('otbo5ly.services', [])
     isAuth: isAuth,
     signout: signout
   };
+})
+
+
+.factory('OrderService', function($window, $location){
+  var order = {};
+  return {
+    setOrder : function(newOrder){
+      if($window.localStorage.getItem('com.otbo5ly')){
+        order = newOrder;
+        $location.path('/order/add');
+      } else {
+        $location.path('/signin');
+      }
+    },
+    getOrder : function(){
+      return order;
+    },
+    clearOrder: function(){
+      order = {};
+    }
+  }
 });
